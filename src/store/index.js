@@ -9,6 +9,9 @@ const room = {
     players: []
   },
   mutations: {
+    setRoomId(state, roomId) {
+      state.roomId = roomId;
+    },
     fetchPlayers(state, players) {
       state.players = players;
     },
@@ -17,11 +20,9 @@ const room = {
     }
   },
   actions: {
-    socket_createRoom({ commit }, payload) {
-      console.log(payload);
-    },
     socket_joinRoom({ commit }, payload) {
       commit("fetchPlayers", payload.players);
+      commit("setRoomId", payload.roomId);
     },
     socket_leaveRoom({ commit }, payload) {
       commit("removePlayer", payload.playerId);

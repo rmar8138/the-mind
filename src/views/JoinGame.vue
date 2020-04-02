@@ -1,8 +1,13 @@
 <template>
   <form @submit.prevent="onFormSubmit">
     <h2>Join Game</h2>
-    <input type="text" v-model="roomId" placeholder="Enter Room ID" />
-    <input type="text" v-model="username" placeholder="Enter Username" />
+    <span v-if="errorMessage">{{ errorMessage }}</span>
+    <div>
+      <input type="text" v-model="roomId" placeholder="Enter Room ID" />
+    </div>
+    <div>
+      <input type="text" v-model="username" placeholder="Enter Username" />
+    </div>
     <button>Create Game</button>
     <router-link to="/">Back</router-link>
   </form>
@@ -14,7 +19,8 @@ export default {
   data() {
     return {
       roomId: "",
-      username: ""
+      username: "",
+      errorMessage: null
     };
   },
   methods: {
@@ -30,10 +36,11 @@ export default {
       this.$router.push("lobby");
     }
   },
-  sockets: {
-    error_message(payload) {
-      console.log(payload);
-    }
+  created() {
+    this.errorMessage = this.$route.params.errorMessage;
+  },
+  beforeDestroy() {
+    this.errorMessage = null;
   }
 };
 </script>
