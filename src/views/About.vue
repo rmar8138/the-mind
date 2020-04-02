@@ -1,5 +1,12 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
+  <div>
+    <p>The mind is a very hard game</p>
+    <router-link to="/">Back</router-link>
   </div>
 </template>
+
+<script>
+export default {
+  name: "About"
+};
+</script>
