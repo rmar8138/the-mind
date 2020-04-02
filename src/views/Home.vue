@@ -6,9 +6,7 @@
     </div>
     <div>
       <h2>Join Game</h2>
-      <label>Room ID</label>
-      <input type="text" />
-      <button>Join</button>
+      <router-link to="/join">join</router-link>
     </div>
     <router-link to="/about">How to play</router-link>
   </div>
