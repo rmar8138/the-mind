@@ -63,10 +63,10 @@ io.on("connection", function(socket) {
     });
   });
 
-  socket.on("start_game", payload => {
+  socket.on("start_round", payload => {
     // payload must contain roomId
     rooms[payload.roomId].gameStarted = true;
-    rooms[payload.roomId].round = 4;
+    rooms[payload.roomId].round = payload.round;
 
     //set up game object here
     const { cards, playerCards } = generateCards({
@@ -80,8 +80,6 @@ io.on("connection", function(socket) {
         throw new Error(error);
       }
 
-      console.log(cards);
-
       clients.forEach((client, index) => {
         io.to(client).emit("assign_cards", {
           playerCards: playerCards[index]
@@ -89,22 +87,22 @@ io.on("connection", function(socket) {
       });
     });
 
-    io.to(payload.roomId).emit("start_game", {
+    io.to(payload.roomId).emit("start_round", {
       cards,
-      playerCards
+      round: payload.round
     });
   });
 
   socket.on("correct_card", payload => {
     // payload should have card and player who oplayed
 
-    socket.emit("correct_card", payload);
+    io.to(payload.roomId).emit("correct_card", payload);
   });
 
   socket.on("incorrect_card", payload => {
     // payload should have card and player who played
 
-    socket.emit("incorrect_card", payload);
+    io.to(payload.roomId).emit("incorrect_card", payload);
   });
 
   socket.on("disconnecting", () => {

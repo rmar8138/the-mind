@@ -24,6 +24,7 @@ export default {
           username: this.username
         }
       });
+      this.$store.commit("setUsername", this.username);
       this.$router.push("lobby");
     }
   }

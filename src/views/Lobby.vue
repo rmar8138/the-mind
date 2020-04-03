@@ -29,8 +29,9 @@ export default {
       // push to game room
       this.$router.push("game");
       // emit game start event
-      this.$socket.client.emit("start_game", {
-        roomId: this.room.roomId
+      this.$socket.client.emit("start_round", {
+        roomId: this.room.roomId,
+        round: 1
       });
     }
   },
@@ -43,7 +44,7 @@ export default {
         }
       });
     },
-    start_game() {
+    start_round() {
       this.$router.push("game");
     }
   }
