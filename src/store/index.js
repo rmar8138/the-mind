@@ -26,6 +26,12 @@ const room = {
     },
     socket_leaveRoom({ commit }, payload) {
       commit("removePlayer", payload.playerId);
+    },
+    // socket_startGame({ commit }, payload) {
+    //   console.log(payload);
+    // }
+    socket_assignCards({ commit }, payload) {
+      console.log(payload);
     }
   }
 };

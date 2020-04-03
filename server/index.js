@@ -10,13 +10,6 @@ const rooms = {
   }
 };
 
-console.log(
-  generateCards({
-    players: [1, 2, 3, 4],
-    round: 8
-  })
-);
-
 server.listen(8000, () => console.log("Server up on port 8000"));
 
 io.on("connection", function(socket) {
@@ -63,7 +56,6 @@ io.on("connection", function(socket) {
 
     rooms[payload.roomId].players.push(payload.player);
     socket.join(payload.roomId);
-    console.log(JSON.stringify(rooms[payload.roomId], null, 2));
 
     io.to(payload.roomId).emit("join_room", {
       roomId: payload.roomId,
@@ -72,10 +64,47 @@ io.on("connection", function(socket) {
   });
 
   socket.on("start_game", payload => {
-    //set up game object here
+    // payload must contain roomId
     rooms[payload.roomId].gameStarted = true;
+    rooms[payload.roomId].round = 4;
 
-    io.to(payload.roomId).emit("start_game");
+    //set up game object here
+    const { cards, playerCards } = generateCards({
+      players: rooms[payload.roomId].players,
+      round: rooms[payload.roomId].round
+    });
+
+    // send cards to each player
+    io.in(payload.roomId).clients((error, clients) => {
+      if (error) {
+        throw new Error(error);
+      }
+
+      console.log(cards);
+
+      clients.forEach((client, index) => {
+        io.to(client).emit("assign_cards", {
+          playerCards: playerCards[index]
+        });
+      });
+    });
+
+    io.to(payload.roomId).emit("start_game", {
+      cards,
+      playerCards
+    });
+  });
+
+  socket.on("correct_card", payload => {
+    // payload should have card and player who oplayed
+
+    socket.emit("correct_card", payload);
+  });
+
+  socket.on("incorrect_card", payload => {
+    // payload should have card and player who played
+
+    socket.emit("incorrect_card", payload);
   });
 
   socket.on("disconnecting", () => {

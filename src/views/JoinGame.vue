@@ -8,7 +8,7 @@
     <div>
       <input type="text" v-model="username" placeholder="Enter Username" />
     </div>
-    <button>Create Game</button>
+    <button>Join Game</button>
     <router-link to="/">Back</router-link>
   </form>
 </template>
