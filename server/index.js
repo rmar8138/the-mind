@@ -2,6 +2,7 @@ const shortid = require("shortid");
 const app = require("express")();
 const server = require("http").Server(app);
 const io = require("socket.io")(server);
+const { generateCards } = require("./utils");
 
 const rooms = {
   full: {
@@ -9,13 +10,21 @@ const rooms = {
   }
 };
 
+console.log(
+  generateCards({
+    players: [1, 2, 3, 4],
+    round: 8
+  })
+);
+
 server.listen(8000, () => console.log("Server up on port 8000"));
 
 io.on("connection", function(socket) {
   socket.on("create_room", payload => {
     const roomId = shortid.generate();
     rooms[roomId] = {
-      players: [payload.player]
+      players: [payload.player],
+      gameStarted: false
     };
 
     socket.join(roomId);
@@ -46,6 +55,12 @@ io.on("connection", function(socket) {
       });
     }
 
+    if (rooms[payload.roomId].gameStarted) {
+      return socket.emit("error_message", {
+        message: "Game has already started"
+      });
+    }
+
     rooms[payload.roomId].players.push(payload.player);
     socket.join(payload.roomId);
     console.log(JSON.stringify(rooms[payload.roomId], null, 2));
@@ -54,6 +69,13 @@ io.on("connection", function(socket) {
       roomId: payload.roomId,
       players: rooms[payload.roomId].players
     });
+  });
+
+  socket.on("start_game", payload => {
+    //set up game object here
+    rooms[payload.roomId].gameStarted = true;
+
+    io.to(payload.roomId).emit("start_game");
   });
 
   socket.on("disconnecting", () => {
