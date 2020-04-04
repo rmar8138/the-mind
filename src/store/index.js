@@ -19,8 +19,10 @@ const room = {
       username: null,
       card: null
     },
+    gameInProgress: false,
     showPlayerReadyModal: false,
-    showGameOverModal: false
+    showGameOverModal: false,
+    showUserDisconnectedModal: false
   },
   getters: {
     readyCount: state => {
@@ -113,6 +115,12 @@ const room = {
     },
     toggleGameOverModal(state) {
       state.showGameOverModal = !state.showGameOverModal;
+    },
+    toggleUserDisconnectedModal(state) {
+      state.showUserDisconnectedModal = !state.showUserDisconnectedModal;
+    },
+    toggleGameInProgress(state) {
+      state.gameInProgress = !state.gameInProgress;
     }
   },
   actions: {
@@ -120,10 +128,16 @@ const room = {
       commit("fetchPlayers", payload.players);
       commit("setRoomId", payload.roomId);
     },
-    socket_leaveRoom({ commit }, payload) {
+    socket_leaveRoom({ commit, state }, payload) {
       commit("removePlayer", payload.playerId);
+
+      if (state.gameInProgress) {
+        // show user disconnected modal
+        commit("toggleUserDisconnectedModal");
+      }
     },
     socket_startRound({ commit, state }, payload) {
+      commit("toggleGameInProgress");
       commit("setRoundCards", payload.cards);
       commit("setRound", payload.round);
       commit("resetCardsPlayed");
@@ -151,12 +165,14 @@ const room = {
       commit("decrementPlayerCardCount", payload.lastPlayed.player.id);
     },
     socket_incorrectCard({ commit }, payload) {
+      commit("toggleGameInProgress");
       commit("setLastPlayed", payload.lastPlayed);
       commit("incrementCardsPlayed");
       commit("decrementPlayerCardCount", payload.lastPlayed.player.id);
       commit("toggleGameOverModal");
     },
     socket_endRound({ commit }) {
+      commit("toggleGameInProgress");
       commit("togglePlayerReadyModal");
     },
     socket_playerReady({ commit }, payload) {

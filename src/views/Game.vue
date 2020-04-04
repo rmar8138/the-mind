@@ -1,7 +1,6 @@
 <template>
   <div>
     <h2>Game</h2>
-    <span>Room ID: {{ room.roomId }}</span>
     <span>Round {{ room.round }}</span>
     <ul v-for="player in room.players" :key="player.id">
       <li>{{ player.username }} has {{ player.cards }} cards left</li>

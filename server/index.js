@@ -85,6 +85,7 @@ io.on("connection", function(socket) {
       cards,
       round: payload.round
     });
+    console.log(JSON.stringify(payload, null, 4));
   });
 
   socket.on("end_round", payload => {
