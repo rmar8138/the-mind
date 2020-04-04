@@ -107,6 +107,16 @@ io.on("connection", function(socket) {
     io.to(payload.roomId).emit("incorrect_card", payload);
   });
 
+  socket.on("leave_room", payload => {
+    rooms[payload.roomId].players = rooms[payload.roomId].players.filter(
+      player => player.id !== socket.id
+    );
+    socket.leave(payload.roomId);
+    io.to(payload.roomId).emit("leave_room", {
+      playerId: socket.id
+    });
+  });
+
   socket.on("disconnecting", () => {
     // remove player from all room
     for (room in socket.rooms) {

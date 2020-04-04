@@ -13,17 +13,20 @@
       <li @click="handleCardPlayed" value="card">{{ card }}</li>
     </ul>
     <PlayerReadyModal v-if="room.showPlayerReadyModal" />
+    <GameOverModal v-if="room.showGameOverModal" />
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
 import PlayerReadyModal from "./../components/PlayerReadyModal";
+import GameOverModal from "./../components/GameOverModal";
 
 export default {
   name: "Game",
   components: {
-    PlayerReadyModal
+    PlayerReadyModal,
+    GameOverModal
   },
   computed: {
     ...mapState(["room"])
@@ -35,8 +38,13 @@ export default {
       const card = parseInt(event.target.innerHTML);
 
       if (card !== this.room.cards[this.room.cardsPlayed]) {
-        // incorrect card
-        return console.log("WRONG CARD");
+        return this.$socket.client.emit("incorrect_card", {
+          roomId: this.room.roomId,
+          lastPlayed: {
+            player: this.room.player,
+            card
+          }
+        });
       }
 
       // remove played card

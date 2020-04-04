@@ -19,7 +19,8 @@ const room = {
       username: null,
       card: null
     },
-    showPlayerReadyModal: false
+    showPlayerReadyModal: false,
+    showGameOverModal: false
   },
   getters: {
     readyCount: state => {
@@ -109,6 +110,9 @@ const room = {
         ...player,
         isReady: false
       }));
+    },
+    toggleGameOverModal(state) {
+      state.showGameOverModal = !state.showGameOverModal;
     }
   },
   actions: {
@@ -125,10 +129,17 @@ const room = {
       commit("resetCardsPlayed");
       commit("resetLastPlayed");
       commit("setPlayerCardCount");
+
       if (state.showPlayerReadyModal) {
         // dont run these before first round
         commit("clearAllPlayerReady");
         commit("togglePlayerReadyModal");
+      }
+
+      if (state.showGameOverModal) {
+        // dont run these before first round
+        commit("clearAllPlayerReady");
+        commit("toggleGameOverModal");
       }
     },
     socket_assignCards({ commit }, payload) {
@@ -138,6 +149,12 @@ const room = {
       commit("setLastPlayed", payload.lastPlayed);
       commit("incrementCardsPlayed");
       commit("decrementPlayerCardCount", payload.lastPlayed.player.id);
+    },
+    socket_incorrectCard({ commit }, payload) {
+      commit("setLastPlayed", payload.lastPlayed);
+      commit("incrementCardsPlayed");
+      commit("decrementPlayerCardCount", payload.lastPlayed.player.id);
+      commit("toggleGameOverModal");
     },
     socket_endRound({ commit }) {
       commit("togglePlayerReadyModal");
