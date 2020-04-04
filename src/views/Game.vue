@@ -7,19 +7,24 @@
       <li>{{ player.username }} has {{ player.cards }} cards left</li>
     </ul>
     <div v-if="room.cardsPlayed > 0">
-      {{ room.lastPlayed.username }} played a {{ room.lastPlayed.card }}
+      {{ room.lastPlayed.player.username }} played a {{ room.lastPlayed.card }}
     </div>
     <ul v-for="card in room.playerCards" :key="card">
       <li @click="handleCardPlayed" value="card">{{ card }}</li>
     </ul>
+    <PlayerReadyModal v-if="room.showPlayerReadyModal" />
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
+import PlayerReadyModal from "./../components/PlayerReadyModal";
 
 export default {
   name: "Game",
+  components: {
+    PlayerReadyModal
+  },
   computed: {
     ...mapState(["room"])
   },
@@ -41,17 +46,15 @@ export default {
       this.$socket.client.emit("correct_card", {
         roomId: this.room.roomId,
         lastPlayed: {
-          username: this.room.username,
+          player: this.room.player,
           card
         }
       });
 
       if (this.room.cardsPlayed === this.room.cards.length - 1) {
-        // next round
-        this.$store.commit("incrementRound");
-        this.$socket.client.emit("start_round", {
-          roomId: this.room.roomId,
-          round: this.room.round
+        // show player ready modal here
+        this.$socket.client.emit("end_round", {
+          roomId: this.room.roomId
         });
       }
     }

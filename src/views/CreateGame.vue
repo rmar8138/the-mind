@@ -17,14 +17,13 @@ export default {
   },
   methods: {
     onFormSubmit() {
+      const player = {
+        id: this.$socket.client.id,
+        username: this.username
+      };
       // emit socket event to create room and add player
-      this.$socket.client.emit("create_room", {
-        player: {
-          id: this.$socket.client.id,
-          username: this.username
-        }
-      });
-      this.$store.commit("setUsername", this.username);
+      this.$socket.client.emit("create_room", { player });
+      this.$store.commit("setPlayer", player);
       this.$router.push("lobby");
     }
   }

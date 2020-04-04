@@ -93,6 +93,10 @@ io.on("connection", function(socket) {
     });
   });
 
+  socket.on("end_round", payload => {
+    io.to(payload.roomId).emit("end_round");
+  });
+
   socket.on("correct_card", payload => {
     // payload should have card and player who oplayed
 

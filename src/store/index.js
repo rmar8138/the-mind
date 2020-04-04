@@ -5,7 +5,10 @@ Vue.use(Vuex);
 
 const room = {
   state: {
-    username: "",
+    player: {
+      id: "",
+      username: ""
+    },
     roomId: null,
     round: 1,
     players: [],
@@ -15,11 +18,12 @@ const room = {
     lastPlayed: {
       username: null,
       card: null
-    }
+    },
+    showPlayerReadyModal: false
   },
   mutations: {
-    setUsername(state, username) {
-      state.username = username;
+    setPlayer(state, player) {
+      state.player = player;
     },
     setRoomId(state, roomId) {
       state.roomId = roomId;
@@ -68,9 +72,9 @@ const room = {
         cards: state.round
       }));
     },
-    decrementPlayerCardCount(state, username) {
+    decrementPlayerCardCount(state, id) {
       state.players = state.players.map(player => {
-        if (player.username === username) {
+        if (player.id === id) {
           return {
             ...player,
             cards: (player.cards -= 1)
@@ -79,6 +83,9 @@ const room = {
 
         return player;
       });
+    },
+    togglePlayerReadyModal(state) {
+      state.showPlayerReadyModal = !state.showPlayerReadyModal;
     }
   },
   actions: {
@@ -102,7 +109,10 @@ const room = {
     socket_correctCard({ commit }, payload) {
       commit("setLastPlayed", payload.lastPlayed);
       commit("incrementCardsPlayed");
-      commit("decrementPlayerCardCount", payload.lastPlayed.username);
+      commit("decrementPlayerCardCount", payload.lastPlayed.player.id);
+    },
+    socket_endRound({ commit }) {
+      commit("togglePlayerReadyModal");
     }
   }
 };
