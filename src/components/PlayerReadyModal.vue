@@ -4,7 +4,8 @@
     <ul v-for="player in room.players" :key="player.id">
       <li>{{ player.username }} | <span v-if="player.isReady">Ready!</span></li>
     </ul>
-    <button @click.prevent="handleButtonClick">Ready</button>
+    <button @click.prevent="handlePlayerReady">Ready</button>
+    <button @click.prevent="handleLeaveRoom">Leave</button>
   </div>
 </template>
 
@@ -24,7 +25,7 @@ export default {
         round: this.room.round + 1
       });
     },
-    handleButtonClick() {
+    handlePlayerReady() {
       // refactor this!!!
       if (this.readyCount + 1 === this.room.players.length) {
         // last person to be ready
@@ -40,6 +41,13 @@ export default {
         roomId: this.room.roomId,
         id: this.room.player.id
       });
+    },
+    handleLeaveRoom() {
+      this.$socket.client.emit("leave_room", {
+        roomId: this.room.roomId
+      });
+      this.$store.commit("resetState");
+      this.$router.push("/");
     }
   }
 };

@@ -49,6 +49,7 @@ export default {
       this.$socket.client.emit("leave_room", {
         roomId: this.room.roomId
       });
+      this.$store.commit("resetState");
       this.$router.push("/");
     }
   }

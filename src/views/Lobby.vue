@@ -14,13 +14,6 @@ import { mapState } from "vuex";
 
 export default {
   name: "Lobby",
-  created() {
-    // get players
-    // console.log(this.$socket.client);
-    // if (!this.$store.state.room.roomId) {
-    //   $this.router.push()
-    // }
-  },
   computed: {
     ...mapState(["room"])
   },
