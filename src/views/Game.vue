@@ -4,7 +4,7 @@
     <span>Room ID: {{ room.roomId }}</span>
     <span>Round {{ room.round }}</span>
     <ul v-for="player in room.players" :key="player.id">
-      <li>{{ player.username }}</li>
+      <li>{{ player.username }} has {{ player.cards }} cards left</li>
     </ul>
     <div v-if="room.cardsPlayed > 0">
       {{ room.lastPlayed.username }} played a {{ room.lastPlayed.card }}

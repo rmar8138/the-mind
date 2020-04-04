@@ -61,6 +61,24 @@ const room = {
         username: null,
         card: null
       };
+    },
+    setPlayerCardCount(state) {
+      state.players = state.players.map(player => ({
+        ...player,
+        cards: state.round
+      }));
+    },
+    decrementPlayerCardCount(state, username) {
+      state.players = state.players.map(player => {
+        if (player.username === username) {
+          return {
+            ...player,
+            cards: (player.cards -= 1)
+          };
+        }
+
+        return player;
+      });
     }
   },
   actions: {
@@ -76,6 +94,7 @@ const room = {
       commit("setRound", payload.round);
       commit("resetCardsPlayed");
       commit("resetLastPlayed");
+      commit("setPlayerCardCount");
     },
     socket_assignCards({ commit }, payload) {
       commit("assignCards", payload.playerCards);
@@ -83,6 +102,7 @@ const room = {
     socket_correctCard({ commit }, payload) {
       commit("setLastPlayed", payload.lastPlayed);
       commit("incrementCardsPlayed");
+      commit("decrementPlayerCardCount", payload.lastPlayed.username);
     }
   }
 };
