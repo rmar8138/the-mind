@@ -131,5 +131,7 @@ io.on("connection", function(socket) {
         });
       }
     }
+
+    // delete room if no more users?
   });
 });

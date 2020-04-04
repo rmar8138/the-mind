@@ -3,27 +3,29 @@ import Vuex from "vuex";
 
 Vue.use(Vuex);
 
-const room = {
-  state: {
-    player: {
-      id: "",
-      username: ""
-    },
-    roomId: null,
-    round: 1,
-    players: [],
-    playerCards: [],
-    cards: [],
-    cardsPlayed: 0,
-    lastPlayed: {
-      username: null,
-      card: null
-    },
-    gameInProgress: false,
-    showPlayerReadyModal: false,
-    showGameOverModal: false,
-    showUserDisconnectedModal: false
+const initialState = () => ({
+  player: {
+    id: "",
+    username: ""
   },
+  roomId: null,
+  round: 1,
+  players: [],
+  playerCards: [],
+  cards: [],
+  cardsPlayed: 0,
+  lastPlayed: {
+    username: null,
+    card: null
+  },
+  gameInProgress: false,
+  showPlayerReadyModal: false,
+  showGameOverModal: false,
+  showUserDisconnectedModal: false
+});
+
+const room = {
+  state: initialState,
   getters: {
     readyCount: state => {
       return state.players.filter(player => player.isReady).length;
@@ -121,6 +123,12 @@ const room = {
     },
     toggleGameInProgress(state) {
       state.gameInProgress = !state.gameInProgress;
+    },
+    resetState(state) {
+      const initial = initialState();
+      Object.keys(initial).forEach(key => {
+        state[key] = initial[key];
+      });
     }
   },
   actions: {

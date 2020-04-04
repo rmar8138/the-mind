@@ -13,6 +13,7 @@
     </ul>
     <PlayerReadyModal v-if="room.showPlayerReadyModal" />
     <GameOverModal v-if="room.showGameOverModal" />
+    <UserDisconnectedModal v-if="room.showUserDisconnectedModal" />
   </div>
 </template>
 
@@ -20,12 +21,14 @@
 import { mapState } from "vuex";
 import PlayerReadyModal from "./../components/PlayerReadyModal";
 import GameOverModal from "./../components/GameOverModal";
+import UserDisconnectedModal from "./../components/UserDisconnectedModal";
 
 export default {
   name: "Game",
   components: {
     PlayerReadyModal,
-    GameOverModal
+    GameOverModal,
+    UserDisconnectedModal
   },
   computed: {
     ...mapState(["room"])
