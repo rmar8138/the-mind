@@ -27,7 +27,8 @@ export default {
     onFormSubmit() {
       const player = {
         id: this.$socket.client.id,
-        username: this.username
+        username: this.username,
+        isReady: false
       };
       // emit socket event to create room and add player
       this.$socket.client.emit("join_room", {

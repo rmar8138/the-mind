@@ -30,12 +30,6 @@ io.on("connection", function(socket) {
   });
 
   socket.on("join_room", payload => {
-    // find room
-    // if room exists, push user into users array
-    // socket.join
-
-    // if room doesnt exist, emit error
-
     if (!rooms[payload.roomId]) {
       return socket.emit("error_message", {
         message: "Room doesn't exist"
@@ -95,6 +89,10 @@ io.on("connection", function(socket) {
 
   socket.on("end_round", payload => {
     io.to(payload.roomId).emit("end_round");
+  });
+
+  socket.on("player_ready", payload => {
+    io.to(payload.roomId).emit("player_ready", payload);
   });
 
   socket.on("correct_card", payload => {

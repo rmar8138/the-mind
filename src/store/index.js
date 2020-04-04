@@ -21,6 +21,11 @@ const room = {
     },
     showPlayerReadyModal: false
   },
+  getters: {
+    readyCount: state => {
+      return state.players.filter(player => player.isReady).length;
+    }
+  },
   mutations: {
     setPlayer(state, player) {
       state.player = player;
@@ -86,6 +91,24 @@ const room = {
     },
     togglePlayerReadyModal(state) {
       state.showPlayerReadyModal = !state.showPlayerReadyModal;
+    },
+    updatePlayerReady(state, id) {
+      state.players = state.players.map(player => {
+        if (player.id === id) {
+          return {
+            ...player,
+            isReady: true
+          };
+        }
+
+        return player;
+      });
+    },
+    clearAllPlayerReady(state) {
+      state.players = state.players.map(player => ({
+        ...player,
+        isReady: false
+      }));
     }
   },
   actions: {
@@ -96,12 +119,17 @@ const room = {
     socket_leaveRoom({ commit }, payload) {
       commit("removePlayer", payload.playerId);
     },
-    socket_startRound({ commit }, payload) {
+    socket_startRound({ commit, state }, payload) {
       commit("setRoundCards", payload.cards);
       commit("setRound", payload.round);
       commit("resetCardsPlayed");
       commit("resetLastPlayed");
       commit("setPlayerCardCount");
+      if (state.showPlayerReadyModal) {
+        // dont run these before first round
+        commit("clearAllPlayerReady");
+        commit("togglePlayerReadyModal");
+      }
     },
     socket_assignCards({ commit }, payload) {
       commit("assignCards", payload.playerCards);
@@ -113,6 +141,9 @@ const room = {
     },
     socket_endRound({ commit }) {
       commit("togglePlayerReadyModal");
+    },
+    socket_playerReady({ commit }, payload) {
+      commit("updatePlayerReady", payload.id);
     }
   }
 };
