@@ -14,6 +14,11 @@ import { mapState } from "vuex";
 
 export default {
   name: "Lobby",
+  // created() {
+  //   if (!this.room.player.username) {
+  //     this.$router.push("/");
+  //   }
+  // },
   computed: {
     ...mapState(["room"])
   },

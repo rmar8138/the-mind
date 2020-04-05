@@ -1,6 +1,7 @@
 <template>
   <div>
-    <h3>Ready for the next round?</h3>
+    <h3 v-if="room.gameWon">You won! Play again?</h3>
+    <h3 v-else>Ready for the next round?</h3>
     <ul v-for="player in room.players" :key="player.id">
       <li>{{ player.username }} | <span v-if="player.isReady">Ready!</span></li>
     </ul>
@@ -20,6 +21,13 @@ export default {
   },
   methods: {
     startNewRound() {
+      if (this.room.gameWon) {
+        return this.$socket.client.emit("start_round", {
+          roomId: this.room.roomId,
+          round: 1
+        });
+      }
+
       this.$socket.client.emit("start_round", {
         roomId: this.room.roomId,
         round: this.room.round + 1

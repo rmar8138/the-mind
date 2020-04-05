@@ -19,6 +19,7 @@ const initialState = () => ({
     card: null
   },
   gameInProgress: false,
+  gameWon: false,
   showPlayerReadyModal: false,
   showGameOverModal: false,
   showUserDisconnectedModal: false
@@ -129,6 +130,9 @@ const room = {
       Object.keys(initial).forEach(key => {
         state[key] = initial[key];
       });
+    },
+    toggleGameWon(state) {
+      state.gameWon = !state.gameWon;
     }
   },
   actions: {
@@ -163,6 +167,11 @@ const room = {
         commit("clearAllPlayerReady");
         commit("toggleGameOverModal");
       }
+
+      if (payload.round === 1 && state.gameWon) {
+        // new game after win, toggle gameWon
+        commit("toggleGameWon");
+      }
     },
     socket_assignCards({ commit }, payload) {
       commit("assignCards", payload.playerCards);
@@ -179,7 +188,11 @@ const room = {
       commit("decrementPlayerCardCount", payload.lastPlayed.player.id);
       commit("toggleGameOverModal");
     },
-    socket_endRound({ commit }) {
+    socket_endRound({ commit, state }) {
+      if (state.round === 12) {
+        commit("toggleGameWon");
+      }
+
       commit("toggleGameInProgress");
       commit("togglePlayerReadyModal");
     },
