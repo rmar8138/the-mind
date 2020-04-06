@@ -5,7 +5,7 @@ import store from "./store";
 import VueSocketIOExt from "vue-socket.io-extended";
 import io from "socket.io-client";
 
-const socket = io("http://localhost:8000");
+const socket = io(process.env.VUE_APP_SERVER_URL);
 
 Vue.use(VueSocketIOExt, socket, { store });
 
