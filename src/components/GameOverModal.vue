@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="game-over">
     <h3>You lose...</h3>
     <p>
       {{ this.room.lastPlayed.player.username }} played
@@ -9,12 +9,15 @@
     <h3>Play again?</h3>
     <ul v-for="player in room.players" :key="player.id">
       <li>
-        {{ player.username }} |
-        <span v-if="player.isReady">Ready!</span>
+        <span class="player">{{ player.username }}</span>
+        <span v-if="player.isReady" class="ready"></span>
+        <span v-else class="not-ready"></span>
       </li>
     </ul>
-    <button @click.prevent="handlePlayerReady">Ready!</button>
-    <button @click.prevent="handleLeaveRoom">Leave</button>
+    <div class="buttons">
+      <button class="button" @click.prevent="handlePlayerReady">Ready!</button>
+      <button class="button button-grey" @click.prevent="handleLeaveRoom">Leave</button>
+    </div>
   </div>
 </template>
 
@@ -29,16 +32,9 @@ export default {
   },
   methods: {
     startNewRound() {
-      if (this.room.gameWon) {
-        return this.$socket.client.emit("start_round", {
-          roomId: this.room.roomId,
-          round: 1
-        });
-      }
-
       this.$socket.client.emit("start_round", {
         roomId: this.room.roomId,
-        round: this.room.round + 1
+        round: 1
       });
     },
     handlePlayerReady() {
@@ -69,4 +65,75 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+h3,
+p {
+  text-align: center;
+}
+
+li {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+button {
+  background-color: $color-dark-grey;
+}
+
+.game-over {
+  width: 80vw;
+  padding: $space-sm;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: $color-dark-grey;
+  border-radius: 5px;
+
+  & > *:not(:last-child) {
+    margin-bottom: $space-sm;
+  }
+}
+
+.buttons {
+  font-size: $text-xs;
+  display: flex;
+}
+
+.button-grey {
+  color: $color-light-grey;
+}
+
+.player {
+  text-align: right;
+  margin-right: $space-sm;
+}
+
+.ready,
+.not-ready {
+  text-align: left;
+  margin-left: $space-sm;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ready::after,
+.not-ready::after {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 100%;
+}
+
+.ready::after {
+  border: 1px solid $color-primary;
+  background-color: $color-primary;
+}
+
+.not-ready::after {
+  border: 1px solid $color-light-grey;
+  background-color: $color-dark-grey;
+}
+</style>

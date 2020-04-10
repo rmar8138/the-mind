@@ -1,8 +1,10 @@
 <template>
   <form @submit.prevent="onFormSubmit">
     <h2>Create Game</h2>
-    <input type="text" v-model="username" placeholder="Enter Username" />
-    <button>Create Game</button>
+    <div class="button-group">
+      <input type="text" v-model="username" placeholder="Enter Username" />
+      <button class="button button-empty">Create Game</button>
+    </div>
     <router-link to="/">Back</router-link>
   </form>
 </template>
@@ -30,3 +32,14 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+form {
+  padding: $space-md;
+  height: 100vh;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+</style>

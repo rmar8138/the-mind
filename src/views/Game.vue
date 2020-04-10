@@ -1,24 +1,48 @@
 <template>
   <div>
-    <h2>Game</h2>
-    <span>Round {{ room.round }}</span>
-    <ul v-for="player in room.players" :key="player.id">
-      <li>{{ player.username }} has {{ player.cards }} cards left</li>
-    </ul>
-    <div v-if="room.cardsPlayed > 0">
-      {{ room.lastPlayed.player.username }} played a {{ room.lastPlayed.card }}
+    <div class="game" v-bind:class="{disabled: modalOpen}">
+      <div>
+        <div class="menu">
+          <button class="button">Leave</button>
+          <h2>Game</h2>
+          <button class="button">Help</button>
+        </div>
+        <ul class="other-players">
+          <li v-for="player in otherPlayers" :key="player.id">
+            <span class="other-player">{{ player.username }}</span>
+            <span class="cards-left">{{ player.cards }}</span>
+          </li>
+        </ul>
+      </div>
+      <div class="board">
+        <h3>Round {{ room.round }}</h3>
+        <div v-if="room.cardsPlayed > 0">
+          <p>{{ room.lastPlayed.player.username }} played</p>
+          <span>{{ room.lastPlayed.card }}</span>
+        </div>
+        <p v-else>No cards played yet</p>
+      </div>
+      <div class="your-cards">
+        <div>
+          <p v-if="room.playerCards.length >= 1">Your next card is:</p>
+          <span class="next-card" @click="handleCardPlayed">{{ room.playerCards[0] }}</span>
+        </div>
+        <div class="cards-left" v-bind:class="{'not-visible': room.playerCards.length <= 1}">
+          <p>Cards left:</p>
+          <ul>
+            <li v-for="card in excludeHighestCard" :key="card">{{ card }}</li>
+          </ul>
+        </div>
+      </div>
     </div>
-    <ul v-for="card in room.playerCards" :key="card">
-      <li @click="handleCardPlayed" value="card">{{ card }}</li>
-    </ul>
     <PlayerReadyModal v-if="room.showPlayerReadyModal" />
-    <GameOverModal v-if="room.showGameOverModal" />
-    <UserDisconnectedModal v-if="room.showUserDisconnectedModal" />
+    <GameOverModal v-else-if="room.showGameOverModal" />
+    <UserDisconnectedModal v-else-if="room.showUserDisconnectedModal" />
   </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import PlayerReadyModal from "./../components/PlayerReadyModal";
 import GameOverModal from "./../components/GameOverModal";
 import UserDisconnectedModal from "./../components/UserDisconnectedModal";
@@ -31,7 +55,8 @@ export default {
     UserDisconnectedModal
   },
   computed: {
-    ...mapState(["room"])
+    ...mapState(["room"]),
+    ...mapGetters(["otherPlayers", "excludeHighestCard", "modalOpen"])
   },
   methods: {
     handleCardPlayed(event) {
@@ -71,3 +96,90 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+p {
+  color: $color-light-grey;
+}
+
+.game {
+  position: relative;
+  height: 100vh;
+  padding: $space-md;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  button {
+    font-size: $text-sm;
+    padding: 0;
+  }
+}
+
+.menu {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.other-players {
+  display: flex;
+  justify-content: center;
+  margin: $space-md 0;
+
+  li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  li:not(:last-child) {
+    margin-right: $space-lg;
+  }
+}
+
+.other-player {
+  font-size: $text-md;
+}
+
+.cards-left {
+  color: $color-light-grey;
+}
+
+.board {
+  margin: $space-md 0 auto 0;
+  text-align: center;
+
+  span {
+    font-size: $text-xxl;
+  }
+}
+
+.your-cards {
+  text-align: center;
+}
+
+.next-card {
+  font-size: $text-xxl;
+}
+
+.cards-left {
+  ul {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+
+    li:not(:last-child) {
+      margin-right: $space-sm;
+    }
+  }
+}
+
+.not-visible {
+  visibility: hidden;
+}
+
+.disabled {
+  pointer-events: none;
+}
+</style>

@@ -1,14 +1,11 @@
 <template>
-  <div>
-    <div>
-      <h2>Create Game</h2>
-      <router-link to="/create">Create</router-link>
+  <div class="home">
+    <h1>The Mind</h1>
+    <div class="button-group">
+      <router-link class="button" to="/create">Create Game</router-link>
+      <router-link class="button" to="/join">Join Game</router-link>
     </div>
-    <div>
-      <h2>Join Game</h2>
-      <router-link to="/join">join</router-link>
-    </div>
-    <router-link to="/about">How to play</router-link>
+    <router-link class="link" to="/about">How to play</router-link>
   </div>
 </template>
 
@@ -17,3 +14,14 @@ export default {
   name: "Home"
 };
 </script>
+
+<style lang="scss" scoped>
+.home {
+  padding: $space-md;
+  height: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+</style>
