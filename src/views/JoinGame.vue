@@ -2,13 +2,11 @@
   <form @submit.prevent="onFormSubmit">
     <h2>Join Game</h2>
     <span v-if="errorMessage">{{ errorMessage }}</span>
-    <div>
+    <div class="button-group">
       <input type="text" v-model="roomId" placeholder="Enter Room ID" />
-    </div>
-    <div>
       <input type="text" v-model="username" placeholder="Enter Username" />
     </div>
-    <button>Join Game</button>
+    <button class="button">Join Game</button>
     <router-link to="/">Back</router-link>
   </form>
 </template>
@@ -47,3 +45,14 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+form {
+  padding: $space-md;
+  height: 100vh;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+</style>

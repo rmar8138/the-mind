@@ -1,28 +1,75 @@
 <template>
-  <div id="app">
-    <h1>The Mind</h1>
+  <div class="app">
     <router-view />
   </div>
 </template>
 
+<script>
+export default {};
+</script>
+
 <style lang="scss">
-#app {
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: inherit;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+body {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
+  color: $color-white;
+  font-size: $text-md;
+  background-color: $color-black;
 }
 
-#nav {
-  padding: 30px;
+h1 {
+  font-size: $text-xxl;
+}
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
+a {
+  text-decoration: none;
+  color: $color-white;
+}
 
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+input {
+  padding: $space-sm;
+  background-color: $color-black;
+  color: $color-primary;
+  border: 1px solid $color-primary;
+  padding: $space-sm;
+  border-radius: 5px;
+  font-size: $text-md;
+  text-align: center;
+  width: 100%;
+}
+
+.button {
+  text-decoration: none;
+  background-color: $color-black;
+  color: $color-primary;
+  border: 1px solid $color-primary;
+  padding: $space-sm;
+  border-radius: 5px;
+  font-size: $text-md;
+  width: 100%;
+}
+
+.app {
+  height: 100vh;
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+
+  & > *:not(:last-child) {
+    margin-bottom: $space-sm;
   }
 }
 </style>
