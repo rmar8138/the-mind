@@ -30,6 +30,12 @@ const room = {
   getters: {
     readyCount: state => {
       return state.players.filter(player => player.isReady).length;
+    },
+    otherPlayers: state => {
+      return state.players.filter(player => player.id !== state.player.id);
+    },
+    excludeHighestCard: state => {
+      return state.playerCards.slice(1);
     }
   },
   mutations: {

@@ -19,7 +19,8 @@ $text-xl: calc(
   #{$base-size} * #{$scale-ratio} * #{$scale-ratio} * #{$scale-ratio}
 );
 $text-xxl: calc(
-  #{$base-size} * #{$scale-ratio} * #{$scale-ratio} * #{$scale-ratio} * #{$scale-ratio}
+  #{$base-size} * #{$scale-ratio} * #{$scale-ratio} * #{$scale-ratio} * #{$scale-ratio} *
+    #{$scale-ratio} * #{$scale-ratio}
 );
 
 // SPACING VARIABLES //
