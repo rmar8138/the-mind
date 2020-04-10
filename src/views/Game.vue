@@ -8,8 +8,8 @@
       </div>
       <ul class="other-players">
         <li v-for="player in otherPlayers" :key="player.id">
-          <span>{{ player.username }}</span>
-          <span>{{ player.cards }}</span>
+          <span class="other-player">{{ player.username }}</span>
+          <span class="cards-left">{{ player.cards }}</span>
         </li>
       </ul>
     </div>
@@ -101,6 +101,7 @@ p {
 }
 
 .game {
+  position: relative;
   height: 100vh;
   padding: $space-md;
   display: flex;
@@ -131,12 +132,20 @@ p {
   }
 
   li:not(:last-child) {
-    margin-right: $space-sm;
+    margin-right: $space-lg;
   }
 }
 
+.other-player {
+  font-size: $text-md;
+}
+
+.cards-left {
+  color: $color-light-grey;
+}
+
 .board {
-  margin: $space-md 0;
+  margin: $space-md 0 auto 0;
   text-align: center;
 
   span {

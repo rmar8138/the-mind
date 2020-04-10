@@ -105,6 +105,13 @@ const room = {
       state.showPlayerReadyModal = !state.showPlayerReadyModal;
     },
     updatePlayerReady(state, id) {
+      if (state.player.id === id) {
+        state.player = {
+          ...state.player,
+          isReady: true
+        };
+      }
+
       state.players = state.players.map(player => {
         if (player.id === id) {
           return {
@@ -117,6 +124,11 @@ const room = {
       });
     },
     clearAllPlayerReady(state) {
+      state.player = {
+        ...state.player,
+        isReady: false
+      };
+
       state.players = state.players.map(player => ({
         ...player,
         isReady: false
