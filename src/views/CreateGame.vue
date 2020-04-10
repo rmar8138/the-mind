@@ -3,7 +3,7 @@
     <h2>Create Game</h2>
     <div class="button-group">
       <input type="text" v-model="username" placeholder="Enter Username" />
-      <button class="button">Create Game</button>
+      <button class="button button-empty">Create Game</button>
     </div>
     <router-link to="/">Back</router-link>
   </form>

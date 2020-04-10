@@ -20,7 +20,7 @@ html {
 }
 
 body {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: $font-primary;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: $color-white;
@@ -37,28 +37,52 @@ a {
   color: $color-white;
 }
 
+li {
+  list-style: none;
+}
+
 input {
+  font-family: $font-primary;
   padding: $space-sm;
   background-color: $color-black;
   color: $color-primary;
-  border: 1px solid $color-primary;
+  border: 1px solid transparent;
   padding: $space-sm;
-  border-radius: 5px;
+  /* border-radius: 5px; */
   font-size: $text-md;
   text-align: center;
   width: 100%;
+  transition: all 0.2s ease-out;
+
+  &:focus {
+    outline: none;
+    border-bottom: 1px solid $color-primary;
+  }
+
+  &:focus::-webkit-input-placeholder {
+    color: transparent;
+  }
+}
+
+button {
+  font-family: $font-primary;
+  border: none;
 }
 
 .button {
   text-decoration: none;
   background-color: $color-black;
   color: $color-primary;
-  border: 1px solid $color-primary;
+  /* border: 1px solid $color-primary; */
   padding: $space-sm;
   border-radius: 5px;
   font-size: $text-md;
   width: 100%;
 }
+
+/* .button-empty {
+  border: 1px solid transparent;
+} */
 
 .app {
   height: 100vh;

@@ -1,14 +1,16 @@
 <template>
   <div class="lobby">
-    <div class="heading">
-      <h2>Lobby</h2>
-      <span>Room ID: {{ room.roomId }}</span>
-    </div>
-    <div class="players">
-      <h3>Players</h3>
-      <ul v-for="player in room.players" :key="player.id">
-        <li>{{ player.username }}</li>
-      </ul>
+    <div>
+      <div class="heading">
+        <h2>Lobby</h2>
+        <span>Room ID: {{ room.roomId }}</span>
+      </div>
+      <div class="players">
+        <h3>Players</h3>
+        <ul>
+          <li v-for="player in room.players" :key="player.id">{{ player.username }}</li>
+        </ul>
+      </div>
     </div>
     <button class="button" @click.prevent="startGame">Start Game</button>
   </div>
@@ -56,6 +58,8 @@ export default {
 
 <style lang="scss" scoped>
 .lobby {
+  text-align: center;
+  padding: $space-md;
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -63,10 +67,21 @@ export default {
 }
 
 .heading {
-  text-align: center;
+  margin-bottom: $space-md;
 }
 
-.players {
-  justify-self: flex-start;
+h3 {
+  color: $color-light-grey;
+}
+
+ul {
+  li:not(:last-child) {
+    border-bottom: 1px solid $color-dark-grey;
+  }
+}
+
+li {
+  font-size: $text-lg;
+  padding: $space-sm;
 }
 </style>
