@@ -5,8 +5,8 @@
     <ul v-for="player in room.players" :key="player.id">
       <li>
         <span class="player">{{ player.username }}</span>
-        <span v-if="player.isReady" class="ready">Ready!</span>
-        <span v-else class="not-ready">Not ready</span>
+        <span v-if="player.isReady" class="ready"></span>
+        <span v-else class="not-ready"></span>
       </li>
     </ul>
     <div class="buttons">
@@ -77,20 +77,21 @@ h3 {
 li {
   display: flex;
   justify-content: space-evenly;
+}
 
-  span {
-    display: inline-block;
-    width: 50%;
-  }
+button {
+  background-color: $color-dark-grey;
 }
 
 .player-ready {
-  /* height: 30vh; */
-  width: 100vw;
+  width: 80vw;
   padding: $space-sm;
   position: absolute;
-  bottom: 0;
-  left: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: $color-dark-grey;
+  border-radius: 5px;
 
   & > *:not(:last-child) {
     margin-bottom: $space-sm;
@@ -111,8 +112,31 @@ li {
   margin-right: $space-sm;
 }
 
-.ready .not-ready {
+.ready,
+.not-ready {
   text-align: left;
   margin-left: $space-sm;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ready::after,
+.not-ready::after {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 100%;
+}
+
+.ready::after {
+  border: 1px solid $color-primary;
+  background-color: $color-primary;
+}
+
+.not-ready::after {
+  border: 1px solid $color-light-grey;
+  background-color: $color-dark-grey;
 }
 </style>

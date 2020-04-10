@@ -73,11 +73,14 @@ button {
   text-decoration: none;
   background-color: $color-black;
   color: $color-primary;
-  /* border: 1px solid $color-primary; */
   padding: $space-sm;
   border-radius: 5px;
   font-size: $text-md;
   width: 100%;
+
+  &:focus {
+    outline: none;
+  }
 }
 
 /* .button-empty {

@@ -1,36 +1,38 @@
 <template>
-  <div class="game">
-    <div>
-      <div class="menu">
-        <button class="button">Leave</button>
-        <h2>Game</h2>
-        <button class="button">Help</button>
-      </div>
-      <ul class="other-players">
-        <li v-for="player in otherPlayers" :key="player.id">
-          <span class="other-player">{{ player.username }}</span>
-          <span class="cards-left">{{ player.cards }}</span>
-        </li>
-      </ul>
-    </div>
-    <div class="board">
-      <h3>Round {{ room.round }}</h3>
-      <div v-if="room.cardsPlayed > 0">
-        <p>{{ room.lastPlayed.player.username }} played</p>
-        <span>{{ room.lastPlayed.card }}</span>
-      </div>
-      <p v-else>No cards played yet</p>
-    </div>
-    <div class="your-cards">
+  <div>
+    <div class="game" v-bind:class="{disabled: modalOpen}">
       <div>
-        <p v-if="room.playerCards.length >= 1">Your next card is:</p>
-        <span class="next-card" @click="handleCardPlayed">{{ room.playerCards[0] }}</span>
-      </div>
-      <div class="cards-left" v-bind:class="{'not-visible': room.playerCards.length <= 1}">
-        <p>Cards left:</p>
-        <ul>
-          <li v-for="card in excludeHighestCard" :key="card">{{ card }}</li>
+        <div class="menu">
+          <button class="button">Leave</button>
+          <h2>Game</h2>
+          <button class="button">Help</button>
+        </div>
+        <ul class="other-players">
+          <li v-for="player in otherPlayers" :key="player.id">
+            <span class="other-player">{{ player.username }}</span>
+            <span class="cards-left">{{ player.cards }}</span>
+          </li>
         </ul>
+      </div>
+      <div class="board">
+        <h3>Round {{ room.round }}</h3>
+        <div v-if="room.cardsPlayed > 0">
+          <p>{{ room.lastPlayed.player.username }} played</p>
+          <span>{{ room.lastPlayed.card }}</span>
+        </div>
+        <p v-else>No cards played yet</p>
+      </div>
+      <div class="your-cards">
+        <div>
+          <p v-if="room.playerCards.length >= 1">Your next card is:</p>
+          <span class="next-card" @click="handleCardPlayed">{{ room.playerCards[0] }}</span>
+        </div>
+        <div class="cards-left" v-bind:class="{'not-visible': room.playerCards.length <= 1}">
+          <p>Cards left:</p>
+          <ul>
+            <li v-for="card in excludeHighestCard" :key="card">{{ card }}</li>
+          </ul>
+        </div>
       </div>
     </div>
     <PlayerReadyModal v-if="room.showPlayerReadyModal" />
@@ -54,7 +56,7 @@ export default {
   },
   computed: {
     ...mapState(["room"]),
-    ...mapGetters(["otherPlayers", "excludeHighestCard"])
+    ...mapGetters(["otherPlayers", "excludeHighestCard", "modalOpen"])
   },
   methods: {
     handleCardPlayed(event) {
@@ -175,5 +177,9 @@ p {
 
 .not-visible {
   visibility: hidden;
+}
+
+.disabled {
+  pointer-events: none;
 }
 </style>

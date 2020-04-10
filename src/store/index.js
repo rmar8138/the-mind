@@ -36,6 +36,17 @@ const room = {
     },
     excludeHighestCard: state => {
       return state.playerCards.slice(1);
+    },
+    modalOpen: state => {
+      if (
+        state.showPlayerReadyModal ||
+        state.showUserDisconnectedModal ||
+        state.showGameOverModal
+      ) {
+        return true;
+      }
+
+      return false;
     }
   },
   mutations: {
