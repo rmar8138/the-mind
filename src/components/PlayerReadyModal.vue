@@ -131,8 +131,8 @@ button {
 }
 
 .ready::after {
-  border: 1px solid $color-primary;
-  background-color: $color-primary;
+  border: 1px solid $color-success;
+  background-color: $color-success;
 }
 
 .not-ready::after {
