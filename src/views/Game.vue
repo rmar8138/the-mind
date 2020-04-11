@@ -19,6 +19,7 @@
         <div v-if="room.cardsPlayed > 0">
           <p>{{ room.lastPlayed.player.username }} played</p>
           <span>{{ room.lastPlayed.card }}</span>
+          <p class="you-won" v-if="room.showPlayerReadyModal">You won!</p>
         </div>
         <p v-else>No cards played yet</p>
       </div>
@@ -35,9 +36,11 @@
         </div>
       </div>
     </div>
-    <PlayerReadyModal v-if="room.showPlayerReadyModal" />
-    <GameOverModal v-else-if="room.showGameOverModal" />
-    <UserDisconnectedModal v-else-if="room.showUserDisconnectedModal" />
+    <transition name="fade-up">
+      <PlayerReadyModal v-if="room.showPlayerReadyModal" />
+      <GameOverModal v-else-if="room.showGameOverModal" />
+      <UserDisconnectedModal v-else-if="room.showUserDisconnectedModal" />
+    </transition>
   </div>
 </template>
 
@@ -175,11 +178,31 @@ p {
   }
 }
 
+.you-won {
+  font-size: $text-xxl;
+}
+
 .not-visible {
   visibility: hidden;
 }
 
 .disabled {
   pointer-events: none;
+}
+
+// transitions //
+
+.fade-up-enter-to {
+  transition: all 0.75s ease-out 1s;
+}
+
+.fade-up-leave-to {
+  transition: all 0.75s ease-out;
+}
+
+.fade-up-enter,
+.fade-up-leave-to {
+  opacity: 0;
+  transform: translate(-50%, -30%);
 }
 </style>

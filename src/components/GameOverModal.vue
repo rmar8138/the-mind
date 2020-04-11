@@ -39,6 +39,8 @@ export default {
     },
     handlePlayerReady() {
       // refactor this!!!
+      if (this.room.player.isReady) return;
+
       if (this.readyCount + 1 === this.room.players.length) {
         // last person to be ready
         this.$socket.client.emit("player_ready", {
