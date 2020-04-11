@@ -16,7 +16,7 @@
     </ul>
     <div class="buttons">
       <button class="button" @click.prevent="handlePlayerReady">Ready!</button>
-      <button class="button button-grey" @click.prevent="handleLeaveRoom">Leave</button>
+      <button class="button button-danger" @click.prevent="handleLeaveRoom">Leave</button>
     </div>
   </div>
 </template>
@@ -76,6 +76,11 @@ p {
 li {
   display: flex;
   justify-content: space-evenly;
+
+  span {
+    display: inline-block;
+    width: 50%;
+  }
 }
 
 button {
@@ -102,12 +107,8 @@ button {
   display: flex;
 }
 
-.button-grey {
-  color: $color-light-grey;
-}
-
 .player {
-  text-align: right;
+  text-align: center;
   margin-right: $space-sm;
 }
 

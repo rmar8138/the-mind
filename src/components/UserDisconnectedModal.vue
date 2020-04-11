@@ -19,6 +19,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+h3 {
+  margin: $space-sm;
+}
+
 button {
   background-color: $color-dark-grey;
 }
@@ -33,9 +37,5 @@ button {
   transform: translate(-50%, -50%);
   background-color: $color-dark-grey;
   border-radius: 5px;
-
-  & > *:not(:last-child) {
-    margin-bottom: $space-sm;
-  }
 }
 </style>

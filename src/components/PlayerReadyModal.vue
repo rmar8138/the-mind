@@ -2,8 +2,8 @@
   <div class="player-ready">
     <h3 v-if="room.gameWon">You won! Play again?</h3>
     <h3 v-else>Ready for the next round?</h3>
-    <ul v-for="player in room.players" :key="player.id">
-      <li>
+    <ul>
+      <li v-for="player in room.players" :key="player.id">
         <span class="player">{{ player.username }}</span>
         <span v-if="player.isReady" class="ready"></span>
         <span v-else class="not-ready"></span>
@@ -11,7 +11,7 @@
     </ul>
     <div class="buttons">
       <button class="button" @click.prevent="handlePlayerReady">Ready</button>
-      <button class="button button-grey" @click.prevent="handleLeaveRoom">Leave</button>
+      <button class="button button-danger" @click.prevent="handleLeaveRoom">Leave</button>
     </div>
   </div>
 </template>
@@ -77,6 +77,11 @@ h3 {
 li {
   display: flex;
   justify-content: space-evenly;
+
+  span {
+    display: inline-block;
+    width: 50%;
+  }
 }
 
 button {
@@ -103,18 +108,13 @@ button {
   display: flex;
 }
 
-.button-grey {
-  color: $color-light-grey;
-}
-
 .player {
-  text-align: right;
+  text-align: center;
   margin-right: $space-sm;
 }
 
 .ready,
 .not-ready {
-  text-align: left;
   margin-left: $space-sm;
   display: flex;
   justify-content: center;
@@ -139,6 +139,4 @@ button {
   border: 1px solid $color-light-grey;
   background-color: $color-dark-grey;
 }
-
-// transitions //
 </style>

@@ -90,12 +90,12 @@ button {
   }
 }
 
-/* .button-empty {
-  border: 1px solid transparent;
-} */
-
 .app {
   height: 100vh;
+}
+
+.button-danger {
+  color: $color-danger;
 }
 
 .button-group {

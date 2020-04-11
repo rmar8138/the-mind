@@ -3,7 +3,7 @@
     <div class="game" v-bind:class="{disabled: modalOpen}">
       <div>
         <div class="menu">
-          <button class="button">Leave</button>
+          <button class="button" @click.prevent="toggleLeaveRoomModal">Leave</button>
           <h2>Game</h2>
           <button class="button" @click.prevent="toggleHelpDrawer">Help</button>
         </div>
@@ -37,10 +37,13 @@
         </div>
       </div>
     </div>
-    <transition name="fade-up">
+    <transition name="fade-up-delay">
       <PlayerReadyModal v-if="room.showPlayerReadyModal" />
       <GameOverModal v-else-if="room.showGameOverModal" />
-      <UserDisconnectedModal v-else-if="room.showUserDisconnectedModal" />
+    </transition>
+    <transition name="fade-up">
+      <UserDisconnectedModal v-if="room.showUserDisconnectedModal" />
+      <LeaveRoomModal v-else-if="room.showLeaveRoomModal" />
     </transition>
     <transition name="slide-in-right">
       <HelpDrawer v-if="room.showHelpDrawer" />
@@ -53,6 +56,7 @@ import { mapState, mapGetters } from "vuex";
 import PlayerReadyModal from "./../components/PlayerReadyModal";
 import GameOverModal from "./../components/GameOverModal";
 import UserDisconnectedModal from "./../components/UserDisconnectedModal";
+import LeaveRoomModal from "./../components/LeaveRoomModal";
 import HelpDrawer from "./../components/HelpDrawer";
 
 export default {
@@ -61,6 +65,7 @@ export default {
     PlayerReadyModal,
     GameOverModal,
     UserDisconnectedModal,
+    LeaveRoomModal,
     HelpDrawer
   },
   computed: {
@@ -104,6 +109,9 @@ export default {
     },
     toggleHelpDrawer() {
       this.$store.commit("toggleHelpDrawer");
+    },
+    toggleLeaveRoomModal() {
+      this.$store.commit("toggleLeaveRoomModal");
     }
   }
 };
@@ -212,14 +220,24 @@ p {
 
 // transitions //
 
-.fade-up-enter-active {
+.fade-up-delay-enter-active {
+  pointer-events: none;
   transition: all 0.75s cubic-bezier(0.25, 1, 0.5, 1) 1s;
 }
 
+.fade-up-enter-active {
+  pointer-events: none;
+  transition: all 0.75s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.fade-up-delay-leave-active,
 .fade-up-leave-active {
+  pointer-events: none;
   transition: all 0.75s cubic-bezier(0.5, 0, 0.75, 0);
 }
 
+.fade-up-delay-enter,
+.fade-up-delay-leave-to,
 .fade-up-enter,
 .fade-up-leave-to {
   opacity: 0;
@@ -228,6 +246,7 @@ p {
 
 .slide-in-right-enter-active,
 .slide-in-right-leave-active {
+  pointer-events: none;
   transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
