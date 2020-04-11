@@ -8,11 +8,18 @@
       <div class="players">
         <h3>Players</h3>
         <ul>
-          <li v-for="player in room.players" :key="player.id">{{ player.username }}</li>
+          <li v-for="player in room.players" :key="player.id">
+            <transition>
+              <span>{{ player.username }}</span>
+            </transition>
+          </li>
         </ul>
       </div>
     </div>
-    <button class="button" @click.prevent="startGame">Start Game</button>
+    <div>
+      <button class="button" @click.prevent="startGame">Start Game</button>
+      <button class="button button-danger" @click.prevent="handleLeaveLobby">Leave</button>
+    </div>
   </div>
 </template>
 
@@ -21,11 +28,6 @@ import { mapState } from "vuex";
 
 export default {
   name: "Lobby",
-  // created() {
-  //   if (!this.room.player.username) {
-  //     this.$router.push("/");
-  //   }
-  // },
   computed: {
     ...mapState(["room"])
   },
@@ -38,6 +40,13 @@ export default {
         roomId: this.room.roomId,
         round: 1
       });
+    },
+    handleLeaveLobby() {
+      this.$socket.client.emit("leave_room", {
+        roomId: this.room.roomId
+      });
+      this.$store.commit("resetState");
+      this.$router.push("/");
     }
   },
   sockets: {

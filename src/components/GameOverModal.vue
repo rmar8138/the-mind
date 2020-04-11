@@ -16,7 +16,7 @@
     </ul>
     <div class="buttons">
       <button class="button" @click.prevent="handlePlayerReady">Ready!</button>
-      <button class="button button-grey" @click.prevent="handleLeaveRoom">Leave</button>
+      <button class="button button-danger" @click.prevent="handleLeaveRoom">Leave</button>
     </div>
   </div>
 </template>
@@ -39,6 +39,8 @@ export default {
     },
     handlePlayerReady() {
       // refactor this!!!
+      if (this.room.player.isReady) return;
+
       if (this.readyCount + 1 === this.room.players.length) {
         // last person to be ready
         this.$socket.client.emit("player_ready", {
@@ -74,6 +76,11 @@ p {
 li {
   display: flex;
   justify-content: space-evenly;
+
+  span {
+    display: inline-block;
+    width: 50%;
+  }
 }
 
 button {
@@ -100,12 +107,8 @@ button {
   display: flex;
 }
 
-.button-grey {
-  color: $color-light-grey;
-}
-
 .player {
-  text-align: right;
+  text-align: center;
   margin-right: $space-sm;
 }
 
@@ -128,8 +131,8 @@ button {
 }
 
 .ready::after {
-  border: 1px solid $color-primary;
-  background-color: $color-primary;
+  border: 1px solid $color-success;
+  background-color: $color-success;
 }
 
 .not-ready::after {

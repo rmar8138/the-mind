@@ -1,6 +1,8 @@
 <template>
   <div class="app">
-    <router-view />
+    <transition name="fade" mode="out-in">
+      <router-view></router-view>
+    </transition>
   </div>
 </template>
 
@@ -46,9 +48,9 @@ input {
   padding: $space-sm;
   background-color: $color-black;
   color: $color-primary;
-  border: 1px solid transparent;
   padding: $space-sm;
-  /* border-radius: 5px; */
+  border: 1px solid transparent;
+  border-bottom: 1px solid $color-dark-grey;
   font-size: $text-md;
   text-align: center;
   width: 100%;
@@ -62,6 +64,11 @@ input {
   &:focus::-webkit-input-placeholder {
     color: transparent;
   }
+}
+
+.has-value {
+  // highlight border bottom when value
+  border-bottom: 1px solid $color-primary;
 }
 
 button {
@@ -83,12 +90,12 @@ button {
   }
 }
 
-/* .button-empty {
-  border: 1px solid transparent;
-} */
-
 .app {
   height: 100vh;
+}
+
+.button-danger {
+  color: $color-danger;
 }
 
 .button-group {
@@ -98,5 +105,15 @@ button {
   & > *:not(:last-child) {
     margin-bottom: $space-sm;
   }
+}
+
+// transitions //
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease-out;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

@@ -22,7 +22,9 @@ const initialState = () => ({
   gameWon: false,
   showPlayerReadyModal: false,
   showGameOverModal: false,
-  showUserDisconnectedModal: false
+  showUserDisconnectedModal: false,
+  showLeaveRoomModal: false,
+  showHelpDrawer: false
 });
 
 const room = {
@@ -162,6 +164,12 @@ const room = {
     },
     toggleGameWon(state) {
       state.gameWon = !state.gameWon;
+    },
+    toggleLeaveRoomModal(state) {
+      state.showLeaveRoomModal = !state.showLeaveRoomModal;
+    },
+    toggleHelpDrawer(state) {
+      state.showHelpDrawer = !state.showHelpDrawer;
     }
   },
   actions: {

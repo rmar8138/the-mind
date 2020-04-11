@@ -3,9 +3,9 @@
     <div class="game" v-bind:class="{disabled: modalOpen}">
       <div>
         <div class="menu">
-          <button class="button">Leave</button>
+          <button class="button" @click.prevent="toggleLeaveRoomModal">Leave</button>
           <h2>Game</h2>
-          <button class="button">Help</button>
+          <button class="button" @click.prevent="toggleHelpDrawer">Help</button>
         </div>
         <ul class="other-players">
           <li v-for="player in otherPlayers" :key="player.id">
@@ -19,13 +19,15 @@
         <div v-if="room.cardsPlayed > 0">
           <p>{{ room.lastPlayed.player.username }} played</p>
           <span>{{ room.lastPlayed.card }}</span>
+          <p class="you-won" v-if="room.showPlayerReadyModal">You won!</p>
         </div>
         <p v-else>No cards played yet</p>
       </div>
       <div class="your-cards">
-        <div>
-          <p v-if="room.playerCards.length >= 1">Your next card is:</p>
+        <div v-if="room.playerCards.length >= 1">
+          <p>Your next card is:</p>
           <span class="next-card" @click="handleCardPlayed">{{ room.playerCards[0] }}</span>
+          <span class="play-action">Touch to play</span>
         </div>
         <div class="cards-left" v-bind:class="{'not-visible': room.playerCards.length <= 1}">
           <p>Cards left:</p>
@@ -35,9 +37,17 @@
         </div>
       </div>
     </div>
-    <PlayerReadyModal v-if="room.showPlayerReadyModal" />
-    <GameOverModal v-else-if="room.showGameOverModal" />
-    <UserDisconnectedModal v-else-if="room.showUserDisconnectedModal" />
+    <transition name="fade-up-delay">
+      <PlayerReadyModal v-if="room.showPlayerReadyModal" />
+      <GameOverModal v-else-if="room.showGameOverModal" />
+    </transition>
+    <transition name="fade-up">
+      <UserDisconnectedModal v-if="room.showUserDisconnectedModal" />
+      <LeaveRoomModal v-else-if="room.showLeaveRoomModal" />
+    </transition>
+    <transition name="slide-in-right">
+      <HelpDrawer v-if="room.showHelpDrawer" />
+    </transition>
   </div>
 </template>
 
@@ -46,13 +56,17 @@ import { mapState, mapGetters } from "vuex";
 import PlayerReadyModal from "./../components/PlayerReadyModal";
 import GameOverModal from "./../components/GameOverModal";
 import UserDisconnectedModal from "./../components/UserDisconnectedModal";
+import LeaveRoomModal from "./../components/LeaveRoomModal";
+import HelpDrawer from "./../components/HelpDrawer";
 
 export default {
   name: "Game",
   components: {
     PlayerReadyModal,
     GameOverModal,
-    UserDisconnectedModal
+    UserDisconnectedModal,
+    LeaveRoomModal,
+    HelpDrawer
   },
   computed: {
     ...mapState(["room"]),
@@ -92,6 +106,12 @@ export default {
           roomId: this.room.roomId
         });
       }
+    },
+    toggleHelpDrawer() {
+      this.$store.commit("toggleHelpDrawer");
+    },
+    toggleLeaveRoomModal() {
+      this.$store.commit("toggleLeaveRoomModal");
     }
   }
 };
@@ -157,10 +177,21 @@ p {
 
 .your-cards {
   text-align: center;
+
+  div {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: $space-sm;
+  }
 }
 
 .next-card {
   font-size: $text-xxl;
+}
+
+.play-action {
+  color: $color-light-grey;
+  font-size: $text-sm;
 }
 
 .cards-left {
@@ -175,11 +206,52 @@ p {
   }
 }
 
+.you-won {
+  font-size: $text-xxl;
+}
+
 .not-visible {
   visibility: hidden;
 }
 
 .disabled {
   pointer-events: none;
+}
+
+// transitions //
+
+.fade-up-delay-enter-active {
+  pointer-events: none;
+  transition: all 0.75s cubic-bezier(0.25, 1, 0.5, 1) 1s;
+}
+
+.fade-up-enter-active {
+  pointer-events: none;
+  transition: all 0.75s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.fade-up-delay-leave-active,
+.fade-up-leave-active {
+  pointer-events: none;
+  transition: all 0.75s cubic-bezier(0.5, 0, 0.75, 0);
+}
+
+.fade-up-delay-enter,
+.fade-up-delay-leave-to,
+.fade-up-enter,
+.fade-up-leave-to {
+  opacity: 0;
+  transform: translate(-50%, -30%);
+}
+
+.slide-in-right-enter-active,
+.slide-in-right-leave-active {
+  pointer-events: none;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.slide-in-right-enter,
+.slide-in-right-leave-to {
+  transform: translateX(100%);
 }
 </style>
