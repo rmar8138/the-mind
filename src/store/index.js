@@ -8,6 +8,7 @@ const initialState = () => ({
     id: "",
     username: ""
   },
+  error: null,
   roomId: null,
   round: 1,
   players: [],
@@ -170,6 +171,12 @@ const room = {
     },
     toggleHelpDrawer(state) {
       state.showHelpDrawer = !state.showHelpDrawer;
+    },
+    setError(state, message) {
+      state.error = message;
+    },
+    clearError(state) {
+      state.error = null;
     }
   },
   actions: {
@@ -235,6 +242,9 @@ const room = {
     },
     socket_playerReady({ commit }, payload) {
       commit("updatePlayerReady", payload.id);
+    },
+    socket_errorMessage({ commit }, payload) {
+      commit("setError", payload.message);
     }
   }
 };

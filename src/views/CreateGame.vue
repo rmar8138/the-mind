@@ -24,6 +24,9 @@ export default {
   },
   methods: {
     onFormSubmit() {
+      if (!this.username) {
+        return;
+      }
       const player = {
         id: this.$socket.client.id,
         username: this.username,

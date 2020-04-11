@@ -1,7 +1,7 @@
 <template>
   <form @submit.prevent="onFormSubmit">
     <h2>Join Game</h2>
-    <span v-if="errorMessage">{{ errorMessage }}</span>
+    <span class="error" v-if="room.error">{{ room.error }}</span>
     <div class="button-group">
       <input
         type="text"
@@ -22,17 +22,24 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "JoinGame",
+  computed: {
+    ...mapState(["room"])
+  },
   data() {
     return {
       roomId: "",
-      username: "",
-      errorMessage: null
+      username: ""
     };
   },
   methods: {
     onFormSubmit() {
+      if (!this.roomId || !this.username) {
+        return;
+      }
       const player = {
         id: this.$socket.client.id,
         username: this.username,
@@ -47,11 +54,12 @@ export default {
       this.$router.push("lobby");
     }
   },
-  created() {
-    this.errorMessage = this.$route.params.errorMessage;
-  },
+  // created() {
+  //   this.errorMessage = this.$route.params.errorMessage;
+  // },
   beforeDestroy() {
-    this.errorMessage = null;
+    // this.errorMessage = null;
+    this.$store.commit("clearError");
   }
 };
 </script>
@@ -64,5 +72,9 @@ form {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+}
+
+.error {
+  color: $color-danger;
 }
 </style>

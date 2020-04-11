@@ -31,6 +31,14 @@ export default {
   computed: {
     ...mapState(["room"])
   },
+  watch: {
+    "this.room.error": {
+      immediate: true,
+      handler() {
+        if (this.room.error !== null) this.$router.push({ path: "/join" });
+      }
+    }
+  },
   methods: {
     startGame() {
       // push to game room
@@ -50,14 +58,14 @@ export default {
     }
   },
   sockets: {
-    error_message(payload) {
-      this.$router.push({
-        name: "JoinGame",
-        params: {
-          errorMessage: payload.message
-        }
-      });
-    },
+    // error_message(payload) {
+    //   this.$router.push({
+    //     name: "JoinGame",
+    //     params: {
+    //       errorMessage: payload.message
+    //     }
+    //   });
+    // },
     start_round() {
       this.$router.push("game");
     }
