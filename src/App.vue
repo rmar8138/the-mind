@@ -46,9 +46,9 @@ input {
   padding: $space-sm;
   background-color: $color-black;
   color: $color-primary;
-  border: 1px solid transparent;
   padding: $space-sm;
-  /* border-radius: 5px; */
+  border: 1px solid transparent;
+  border-bottom: 1px solid $color-dark-grey;
   font-size: $text-md;
   text-align: center;
   width: 100%;
@@ -62,6 +62,11 @@ input {
   &:focus::-webkit-input-placeholder {
     color: transparent;
   }
+}
+
+.has-value {
+  // highlight border bottom when value
+  border-bottom: 1px solid $color-primary;
 }
 
 button {

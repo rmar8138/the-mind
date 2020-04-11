@@ -3,8 +3,18 @@
     <h2>Join Game</h2>
     <span v-if="errorMessage">{{ errorMessage }}</span>
     <div class="button-group">
-      <input type="text" v-model="roomId" placeholder="Enter Room ID" />
-      <input type="text" v-model="username" placeholder="Enter Username" />
+      <input
+        type="text"
+        v-model="roomId"
+        v-bind:class="{'has-value': roomId}"
+        placeholder="Enter Room ID"
+      />
+      <input
+        type="text"
+        v-model="username"
+        v-bind:class="{'has-value': username}"
+        placeholder="Enter Username"
+      />
     </div>
     <button class="button">Join Game</button>
     <router-link to="/">Back</router-link>
